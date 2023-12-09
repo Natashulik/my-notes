@@ -35,10 +35,10 @@ export const notesSlice = createSlice({
           : { ...item, title: action.payload.newTitle }
       );
     },
-    deleteNote: (state, action) => {
+    deleteNote: (state, action: PayloadAction<number>) => {
       state.notes = state.notes.filter((item) => item.id !== action.payload);
     },
-    editNote: (state, action) => {
+    editNote: (state, action: PayloadAction<number>) => {
       state.notes = state.notes.map((item) =>
         item.id === action.payload
           ? { ...item, editMode: !item.editMode }
@@ -48,6 +48,11 @@ export const notesSlice = createSlice({
   },
 });
 
-export const { setNewNote, changeNoteTitle, deleteNote, editNote } =
-  notesSlice.actions;
+export const {
+  setNewNote,
+  changeNoteTitle,
+  deleteNote,
+  editNote,
+  // filterNotes,
+} = notesSlice.actions;
 export default notesSlice.reducer;

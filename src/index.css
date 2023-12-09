@@ -106,6 +106,14 @@ input:focus-visible {
 }
 
 .tags-block {
+  display: flex;
   min-height: 50px;
   margin: 0 10px 10px 10px;
+}
+.tags {
+  margin-right: 10px;
+  width: 80%;
+}
+
+.button-cancel {
 }

@@ -1,11 +1,19 @@
-import { Typography, Tag } from "antd";
+import ContentEditable from "react-contenteditable";
 import { useAppDispatch, useAppSelector } from "../hook";
 import { changeNoteTitle, deleteNote, editNote } from "../redux/notesSlice";
 import { createTag } from "../redux/inputSlice";
 
 function Notes(): JSX.Element {
   const dispatch = useAppDispatch();
-  const notes = useAppSelector((state) => state.notes.notes);
+  const selectedTags = useAppSelector((state) => state.input.selectedTags);
+  const notes = useAppSelector((state) => {
+    if (selectedTags && selectedTags.length > 0) {
+      return state.notes.notes.filter((note) =>
+        selectedTags.some((tag) => note.title.includes(tag))
+      );
+    } else return state.notes.notes;
+  });
+
   const tags = useAppSelector((state) => state.input.tags);
 
   const changeInput = (
@@ -23,22 +31,20 @@ function Notes(): JSX.Element {
     if (editMode) {
       console.log(title);
       const words = title.split(" ");
-      const tagsInTitle = words.filter((word) => word.startsWith("#"));
+      const tagsInNote = words.filter((word) => word.startsWith("#")); // массив тегов  в заметке
 
-      if (tagsInTitle.length !== 0) {
-        tagsInTitle.forEach((item) => {
-          const newTag = { id: Date.now(), title: item };
-          console.log(newTag);
-          if (!tags.some((existingTag) => existingTag.title === newTag.title)) {
-            dispatch(createTag(newTag));
+      if (tagsInNote.length !== 0) {
+        tagsInNote.forEach((item) => {
+          if (!tags.includes(item)) {
+            dispatch(createTag(item));
           }
         });
       }
     }
-    toggle(id, editMode);
+    toggle(id, editMode, title);
   };
 
-  const toggle = (id: number, editMode: boolean): void => {
+  const toggle = (id: number, editMode: boolean, title: string): void => {
     dispatch(editNote(id));
   };
 
