@@ -7,6 +7,7 @@ function MyInput(): JSX.Element {
   const inputText = useAppSelector((state) => state.input.inputText);
   const isEmpty = useAppSelector((state) => state.input.isEmpty);
   const tags = useAppSelector((state) => state.input.tags);
+
   const dispatch = useAppDispatch();
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -25,7 +26,6 @@ function MyInput(): JSX.Element {
       if (inputTags.length !== 0) {
         inputTags.forEach((item) => {
           if (!tags.includes(item)) {
-            /* if (!tags.some((existingTag) => existingTag.title === newTag.title)) */
             dispatch(createTag(item));
           }
         });
@@ -35,11 +35,18 @@ function MyInput(): JSX.Element {
     }
   };
 
+  const handleKeyDown = (event: { key: string }) => {
+    if (event.key === "Enter") {
+      handleClick();
+    }
+  };
+
   return (
     <div className="new-note_block">
       <Input
         value={inputText}
         onChange={onChange}
+        onKeyDown={handleKeyDown}
         placeholder={isEmpty ? "Add new note" : ""}
         className="new-note"
       />

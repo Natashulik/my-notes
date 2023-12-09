@@ -1,11 +1,10 @@
-import ContentEditable from "react-contenteditable";
 import { useAppDispatch, useAppSelector } from "../hook";
 import { changeNoteTitle, deleteNote, editNote } from "../redux/notesSlice";
 import { createTag } from "../redux/inputSlice";
 
 function Notes(): JSX.Element {
-  const dispatch = useAppDispatch();
   const selectedTags = useAppSelector((state) => state.input.selectedTags);
+  const tags = useAppSelector((state) => state.input.tags);
   const notes = useAppSelector((state) => {
     if (selectedTags && selectedTags.length > 0) {
       return state.notes.notes.filter((note) =>
@@ -14,7 +13,7 @@ function Notes(): JSX.Element {
     } else return state.notes.notes;
   });
 
-  const tags = useAppSelector((state) => state.input.tags);
+  const dispatch = useAppDispatch();
 
   const changeInput = (
     id: number,
@@ -31,7 +30,7 @@ function Notes(): JSX.Element {
     if (editMode) {
       console.log(title);
       const words = title.split(" ");
-      const tagsInNote = words.filter((word) => word.startsWith("#")); // массив тегов  в заметке
+      const tagsInNote = words.filter((word) => word.startsWith("#"));
 
       if (tagsInNote.length !== 0) {
         tagsInNote.forEach((item) => {
@@ -59,7 +58,7 @@ function Notes(): JSX.Element {
               className="input-note-title"
             />
           ) : (
-            <p className="note-title">{item.title}</p>
+            <p className="note-title"> {item.title}</p>
           )}
           <button
             className="button-edit"
